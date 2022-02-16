@@ -1,0 +1,35 @@
+﻿@model orderweb.Models.OrdersViewModel
+
+@{
+    ViewData["Title"] = "Post order";
+}
+
+<h1>Order</h1>
+
+<hr />
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Item</th>
+            <th>Quantity</th>
+            <th>Created</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var order in @Model.Orders)
+{var client = new Dapr.Client.DaprClientBuilder().Build();
+    <tr>
+        <td>@order.Id</td>
+        <td>@order.Item</td>
+        <td>@order.Quantity</td>
+        <td>@order.CreatedAt</td>
+    </tr>            
+}
+    </tbody>
+</table>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

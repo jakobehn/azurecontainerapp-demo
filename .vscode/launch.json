@@ -1,0 +1,133 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch orderweb",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build-orderweb",
+            "program": "${workspaceFolder}/orderweb/bin/Debug/net6.0/orderweb.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/orderweb",
+            "stopAtEntry": false,
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/orderweb/Views"
+            }
+        },
+        {
+            "name": "Launch orderprocessor",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build-orderprocessor",
+            "program": "${workspaceFolder}/orderprocessor/bin/Debug/net6.0/orderprocessor.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/orderprocessor",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/orderprocessor/Views"
+            }
+        },
+        {
+            "name": "Launch orderapi",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build-orderapi",
+            "program": "${workspaceFolder}/orderapi/bin/Debug/net6.0/orderapi.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/orderapi",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/orderapi/Views"
+            }
+        },
+        {
+            "name": ".NET Core Attach",
+            "type": "coreclr",
+            "request": "attach"
+        },
+        {
+            "name": "orderweb-dapr",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "orderweb-daprd-debug",
+            "program": "${workspaceFolder}/orderweb/bin/Debug/net6.0/orderweb.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/orderweb",
+            "stopAtEntry": false,
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/orderweb/Views"
+            },
+            "postDebugTask": "orderweb-daprd-down"
+        },
+        {
+            "name": "orderapi-dapr",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "orderapi-daprd-debug",
+            "program": "${workspaceFolder}/orderapi/bin/Debug/net6.0/orderapi.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/orderapi",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/orderapi/Views"
+            },
+            "postDebugTask": "orderapi-daprd-down"
+        },
+        {
+            "name": "orderprocessor-dapr",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "orderprocessor-daprd-debug",
+            "program": "${workspaceFolder}/orderprocessor/bin/Debug/net6.0/orderprocessor.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/orderprocessor",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/orderprocessor/Views"
+            },
+            "postDebugTask": "orderprocessor-daprd-down"
+        },
+        {
+            "name": "Docker .NET Core Launch",
+            "type": "docker",
+            "request": "launch",
+            "preLaunchTask": "docker-run: debug",
+            "netCore": {
+                "appProject": "${workspaceFolder}/orderprocessor/orderprocessor.csproj"
+            }
+        }
+    ],
+    "compounds": [
+        {
+            "name": "RunAll",
+            "configurations": ["orderweb-dapr", "orderapi-dapr", "orderprocessor-dapr"],
+            "stopAll": true
+        }
+    ]
+}

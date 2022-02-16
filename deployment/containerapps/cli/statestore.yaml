@@ -1,0 +1,20 @@
+# components.yaml for Azure Blob storage component
+- name: statestore
+  type: state.azure.cosmosdb
+  version: v1
+  metadata:
+  - name: url
+    value: https://<account>.documents.azure.com:443/
+  - name: masterKey
+    value: <key>
+  - name: database
+    value: <database>
+  - name: collection
+    value: orders
+
+- name: orderpubsub
+  type: pubsub.azure.servicebus
+  version: v1
+  metadata:
+  - name: connectionString # Required
+    value: "<connectionString>"

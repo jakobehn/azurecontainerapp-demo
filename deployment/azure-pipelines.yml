@@ -1,0 +1,57 @@
+name: 2.0$(Rev:.r)
+
+trigger:
+- master
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  scriptPath: '$(Build.SourcesDirectory)/deployment/containerapps/arm/'
+  resourceGroup: 'containerapp'
+  location: 'eastus'
+  logAnalyticsWorkspace: 'containerapps-logs'
+  environment: 'containerapp-env'
+  version: '$(build.buildNumber)'
+
+steps:
+- task: Docker@2
+  displayName: Build and push orderweb
+  inputs:
+    containerRegistry: '<registry>.azurecr.io'
+    repository: 'orderweb'
+    command: 'buildAndPush'
+    Dockerfile: './orderweb/Dockerfile'
+    buildContext: './'
+    tags: '$(Build.BuildNumber)'
+
+- task: Docker@2
+  displayName: Build and push orderapi
+  inputs:
+    containerRegistry: '<registry>.azurecr.io'
+    repository: 'orderapi'
+    command: 'buildAndPush'
+    Dockerfile: './orderapi/Dockerfile'
+    buildContext: './'
+    tags: '$(Build.BuildNumber)'
+
+- task: Docker@2
+  displayName: Build and push orderprocessor
+  inputs:
+    containerRegistry: '<registry>.azurecr.io'
+    repository: 'orderprocessor'
+    command: 'buildAndPush'
+    Dockerfile: './orderprocessor/Dockerfile'
+    buildContext: './'
+    tags: '$(Build.BuildNumber)'
+
+- task: AzureCLI@2
+  displayName: 'Deploy bicep'
+  inputs:
+    azureSubscription: '<subscriptionid>'
+    scriptType: 'pscore'
+    scriptLocation: 'scriptPath'
+    scriptPath: '$(scriptPath)/deploy.ps1'
+    arguments: '-resourceGroup $(resourceGroup) -location $(location) -logAnalyticsWorkspace $(logAnalyticsWorkspace) -environment $(environment) -version $(version)'
+    workingDirectory: '$(scriptPath)'
+  

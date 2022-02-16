@@ -1,0 +1,195 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build-orderapi",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/orderapi/orderapi.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile",
+            "group": "build",
+            "presentation": {
+                "reveal": "silent",
+                "revealProblems": "onProblem",
+                "close": true
+            }
+        },
+        {
+            "label": "build-orderprocessor",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/orderprocessor/orderprocessor.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "silent",
+                "revealProblems": "onProblem",
+                "close": true
+            }
+        },
+        {
+            "label": "build-orderweb",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/orderweb/orderweb.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "silent",
+                "revealProblems": "onProblem",
+                "close": true
+            }
+        },
+        {
+            "label": "build-all",
+            "dependsOn": [
+                "build-orderapi",
+                "build-orderprocessor",
+                "build-orderweb"
+            ],
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "appId": "orderweb",
+            "appPort": 5025,
+            "httpPort": 3500,
+            "metricsPort": 9090,
+            "grpcPort": 50001,
+            "label": "orderweb-daprd-debug",
+            "type": "daprd",
+            "dependsOn": "build-orderweb",
+            "presentation": {
+                "close": false
+            },
+            "componentsPath": "./components"
+        },
+        {
+            "appId": "orderapi",
+            "appPort": 5109,
+            "httpPort": 3501,
+            "metricsPort": 9091,
+            "grpcPort": 50002,
+            "label": "orderapi-daprd-debug",
+            "type": "daprd",
+            "dependsOn": "build-orderapi",
+            "presentation": {
+                "close": true
+            },
+            "componentsPath": "./components"
+        },
+        {
+            "appId": "orderprocessor",
+            "appPort": 5188,
+            "httpPort": 3502,
+            "metricsPort": 9092,
+            "grpcPort": 50003,
+            "label": "orderprocessor-daprd-debug",
+            "type": "daprd",
+            "dependsOn": "build-orderprocessor",
+            "presentation": {
+                "close": false
+            },
+            "componentsPath": "./components"
+        },
+        {
+            "appId": "orderapi",
+            "label": "orderapi-daprd-down",
+            "type": "daprd-down",
+            "presentation": {
+                "close": false
+            }
+        },
+        {
+            "appId": "orderweb",
+            "label": "orderweb-daprd-down",
+            "type": "daprd-down"
+        },
+        {
+            "appId": "orderprocessor",
+            "label": "orderprocessor-daprd-down",
+            "type": "daprd-down"
+        },
+        {
+            "type": "docker-build",
+            "label": "docker-build: debug",
+            "dependsOn": [
+                "build"
+            ],
+            "dockerBuild": {
+                "tag": "azurecontainerapps:dev",
+                "target": "base",
+                "dockerfile": "${workspaceFolder}/orderprocessor/Dockerfile",
+                "context": "${workspaceFolder}",
+                "pull": true
+            },
+            "netCore": {
+                "appProject": "${workspaceFolder}/orderprocessor/orderprocessor.csproj"
+            }
+        },
+        {
+            "type": "docker-build",
+            "label": "docker-build: release",
+            "dependsOn": [
+                "build"
+            ],
+            "dockerBuild": {
+                "tag": "azurecontainerapps:latest",
+                "dockerfile": "${workspaceFolder}/orderprocessor/Dockerfile",
+                "context": "${workspaceFolder}",
+                "pull": true
+            },
+            "netCore": {
+                "appProject": "${workspaceFolder}/orderprocessor/orderprocessor.csproj"
+            }
+        },
+        {
+            "type": "docker-run",
+            "label": "docker-run: debug",
+            "dependsOn": [
+                "docker-build: debug"
+            ],
+            "dockerRun": {},
+            "netCore": {
+                "appProject": "${workspaceFolder}/orderprocessor/orderprocessor.csproj",
+                "enableDebugging": true
+            }
+        },
+        {
+            "type": "docker-run",
+            "label": "docker-run: release",
+            "dependsOn": [
+                "docker-build: release"
+            ],
+            "dockerRun": {},
+            "netCore": {
+                "appProject": "${workspaceFolder}/orderprocessor/orderprocessor.csproj"
+            }
+        }
+    ]
+    
+}
