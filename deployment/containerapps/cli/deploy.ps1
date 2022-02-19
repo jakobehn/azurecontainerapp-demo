@@ -1,7 +1,7 @@
-$RESOURCE_GROUP="<group>"
+$RESOURCE_GROUP="containerapp"
 $LOCATION="eastus"
-$LOG_ANALYTICS_WORKSPACE="<workspace>"
-$CONTAINERAPPS_ENVIRONMENT="<environment"
+$LOG_ANALYTICS_WORKSPACE="containerapps-logs"
+$CONTAINERAPPS_ENVIRONMENT="containerapp-env"
 
 # Create resource group
 az group create `
@@ -36,9 +36,9 @@ az containerapp create `
     --dapr-app-port 5000 `
     --dapr-app-id orderweb `
     --dapr-components .\statestore.yaml `
-    --registry-login-server <registry>.azurecr.io `
-    --registry-username <registry> `
-    --registry-password <password> `
+    --registry-login-server jakob.azurecr.io `
+    --registry-username jakob `
+    --registry-password BNZ4Cn50Q0=CW+g6IH1sYFpOSk1XaYGV `
     --environment-variables DAPR_HTTP_PORT=3500
 
 # Deploy orderapi
@@ -46,16 +46,16 @@ az containerapp create `
     --name orderapi `
     --resource-group $RESOURCE_GROUP `
     --environment $CONTAINERAPPS_ENVIRONMENT `
-    --image <registry>.azurecr.io/orderapi:1.5 `
+    --image jakob.azurecr.io/orderapi:1.5 `
     --target-port 5000 `
     --ingress 'internal' `
     --enable-dapr `
     --dapr-app-port 5000 `
     --dapr-app-id orderapi `
     --dapr-components .\statestore.yaml `
-    --registry-login-server <registry>.azurecr.io `
-    --registry-username <registry> `
-    --registry-password <password> `
+    --registry-login-server jakob.azurecr.io `
+    --registry-username jakob `
+    --registry-password BNZ4Cn50Q0=CW+g6IH1sYFpOSk1XaYGV `
     --environment-variables DAPR_HTTP_PORT=3500
 
 # Deploy orderprocessor
@@ -63,7 +63,7 @@ az containerapp create `
     --name orderprocessor `
     --resource-group $RESOURCE_GROUP `
     --environment $CONTAINERAPPS_ENVIRONMENT `
-    --image <registry>.azurecr.io/orderprocessor:1.6 `
+    --image jakob.azurecr.io/orderprocessor:1.6 `
     --target-port 5000 `
     --ingress 'internal' `
     --min-replicas 1 `
@@ -72,7 +72,7 @@ az containerapp create `
     --dapr-app-port 5000 `
     --dapr-app-id orderprocessor `
     --dapr-components .\statestore.yaml `
-    --registry-login-server <registry>.azurecr.io `
-    --registry-username <registry> `
-    --registry-password <passwor> `
+    --registry-login-server jakob.azurecr.io `
+    --registry-username jakob `
+    --registry-password BNZ4Cn50Q0=CW+g6IH1sYFpOSk1XaYGV `
     --environment-variables DAPR_HTTP_PORT=3500
