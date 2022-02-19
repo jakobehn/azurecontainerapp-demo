@@ -16,13 +16,13 @@ resource nodeapp 'Microsoft.Web/containerapps@2021-03-01' = {
       secrets: [
         {
           name: 'acr-password'
-          value: 'BNZ4Cn50Q0=CW+g6IH1sYFpOSk1XaYGV'
+          value: '<password>'
         }
       ]
       registries: [
         {
-          server: 'jakob.azurecr.io'
-          username: 'jakob'
+          server: '<registry>.azurecr.io'
+          username: '<registry>'
           passwordSecretRef: 'acr-password'
         }
       ]
@@ -30,7 +30,7 @@ resource nodeapp 'Microsoft.Web/containerapps@2021-03-01' = {
     template: {
       containers: [
         {
-          image: 'jakob.azurecr.io/orderweb:${webVersion}'
+          image: '<registry>.azurecr.io/orderweb:${webVersion}'
           name: 'orderweb'
           resources: {
             cpu: '0.5'

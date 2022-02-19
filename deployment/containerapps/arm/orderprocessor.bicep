@@ -13,17 +13,17 @@ resource nodeapp 'Microsoft.Web/containerapps@2021-03-01' = {
       secrets: [
         {
           name: 'acr-password'
-          value: 'BNZ4Cn50Q0=CW+g6IH1sYFpOSk1XaYGV'
+          value: '<password>'
         }
         {
           name: 'servicebus-connectionstring'
-          value: 'Endpoint=sb://daprbus-demo.servicebus.windows.net/;SharedAccessKeyName=containerapp;SharedAccessKey=N/n1/EdY8QQ6cTvRsR+AxCTDOReobuHsAkOfXGikCr0=;EntityPath=orders'
+          value: '<connectionstring>'
         }        
       ]
       registries: [
         {
-          server: 'jakob.azurecr.io'
-          username: 'jakob'
+          server: '<registry>.azurecr.io'
+          username: '<registry>'
           passwordSecretRef: 'acr-password'
         }
       ]
@@ -31,7 +31,7 @@ resource nodeapp 'Microsoft.Web/containerapps@2021-03-01' = {
     template: {
       containers: [
         {
-          image: 'jakob.azurecr.io/orderprocessor:${processorVersion}'
+          image: '<registry>.azurecr.io/orderprocessor:${processorVersion}'
           name: 'orderprocessor'
           resources: {
             cpu: '0.5'
@@ -80,7 +80,7 @@ resource nodeapp 'Microsoft.Web/containerapps@2021-03-01' = {
             metadata: [
               {
                   name: 'connectionString'
-                  value: 'Endpoint=sb://daprbus-demo.servicebus.windows.net/;SharedAccessKeyName=containerapp;SharedAccessKey=N/n1/EdY8QQ6cTvRsR+AxCTDOReobuHsAkOfXGikCr0=;EntityPath=orders'
+                  value: '<connectionstring>'
               }
             ]
           }
@@ -91,15 +91,15 @@ resource nodeapp 'Microsoft.Web/containerapps@2021-03-01' = {
             metadata: [
               {
                   name: 'url'
-                  value: 'https://daprstate.documents.azure.com:443/'
+                  value: 'https://<database>.documents.azure.com:443/'
               }
               {
                   name: 'masterKey'
-                  value: 'fIVJ8fN74uG4gKRdw7lzxYBEio9WUer7IX9Z4MFOewrEXIzNvfwf9vm4D6A0ir1q4yGmFuBCUGjdHPFEhJwyPg=='
+                  value: '<key>'
               }
               {
                   name: 'database'
-                  value: 'daprdemo'
+                  value: '<database>'
               }
               {
                   name: 'collection'
